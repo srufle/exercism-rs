@@ -1,0 +1,97 @@
+#[derive(Debug)]
+pub enum CalculatorInput {
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+    Value(i32),
+}
+
+pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
+    let mut stack: Vec<i32> = vec![];
+    use CalculatorInput::*;
+    for input in inputs {
+        match input {
+            Add => {
+                if let Some(b) = stack.pop() {
+                    if let Some(a) = stack.pop() {
+                        stack.push(a + b);
+                    } else {
+                        return None;
+                    }
+                } else {
+                    return None;
+                }
+            }
+            Subtract => {
+                if let Some(b) = stack.pop() {
+                    if let Some(a) = stack.pop() {
+                        stack.push(a - b);
+                    } else {
+                        return None;
+                    }
+                } else {
+                    return None;
+                }
+            }
+            Multiply => {
+                if let Some(b) = stack.pop() {
+                    if let Some(a) = stack.pop() {
+                        stack.push(a * b);
+                    } else {
+                        return None;
+                    }
+                } else {
+                    return None;
+                }
+            }
+            Divide => {
+                if let Some(b) = stack.pop() {
+                    if let Some(a) = stack.pop() {
+                        stack.push(a / b);
+                    } else {
+                        return None;
+                    }
+                } else {
+                    return None;
+                }
+            }
+            Value(value) => stack.push(*value),
+        }
+    }
+    if stack.len() == 1 {
+        stack.pop()
+    } else {
+        None
+    }
+}
+
+// Inspired by
+// https://exercism.org/tracks/rust/exercises/rpn-calculator/solutions/surfingtomchen
+pub fn evaluate_su(inputs: &[CalculatorInput]) -> Option<i32> {
+    use CalculatorInput::*;
+    let v: Vec<i32> = vec![];
+    let mut result = inputs.iter().fold(v, |mut stack, input| {
+        if let Some(new) = match input {
+            Add => stack
+                .pop()
+                .and_then(|a| stack.pop().and_then(|b| Some(b + a))),
+            Subtract => stack
+                .pop()
+                .and_then(|a| stack.pop().and_then(|b| Some(b - a))),
+            Multiply => stack
+                .pop()
+                .and_then(|a| stack.pop().and_then(|b| Some(b * a))),
+            Divide => stack
+                .pop()
+                .and_then(|a| stack.pop().and_then(|b| Some(b / a))),
+            Value(value) => Some(*value),
+        } {
+            stack.push(new);
+        }
+        stack
+    });
+    result
+        .pop()
+        .and_then(|x| if result.is_empty() { Some(x) } else { None })
+}
