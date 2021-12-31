@@ -1,5 +1,7 @@
 # exercism.org - Rust
 
+<https://exercism.org/tracks/rust>
+
 How to run all tests and feature variants
 
 ``` bash
