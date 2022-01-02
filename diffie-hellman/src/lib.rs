@@ -1,21 +1,27 @@
+use num_bigint::BigUint;
+use rand::prelude::*;
+//  Inspired by https://exercism.org/tracks/rust/exercises/diffie-hellman/solutions/elWanderero
+// To deal with "big-primes"
+pub fn modular_pow(base: u64, exponent: u64, modulus: u64) -> u64 {
+    if modulus == 1 {
+        return 0;
+    }
+
+    let base = BigUint::from(base);
+    let exponent = BigUint::from(exponent);
+    let modulus = BigUint::from(modulus);
+    let c = base.modpow(&exponent, &modulus);
+    return c.iter_u64_digits().next().unwrap();
+}
 pub fn private_key(p: u64) -> u64 {
-    unimplemented!("Pick a private key greater than 1 and less than {}", p)
+    let mut rng = thread_rng();
+    rng.gen_range(2..p)
 }
 
 pub fn public_key(p: u64, g: u64, a: u64) -> u64 {
-    unimplemented!(
-        "Calculate public key using prime numbers {} and {}, and private key {}",
-        p,
-        g,
-        a
-    )
+    modular_pow(g, a, p)
 }
 
 pub fn secret(p: u64, b_pub: u64, a: u64) -> u64 {
-    unimplemented!(
-        "Calculate secret key using prime number {}, public key {}, and private key {}",
-        p,
-        b_pub,
-        a
-    )
+    modular_pow(b_pub, a, p)
 }

@@ -142,3 +142,10 @@ fn test_changed_secret_key() {
 
     assert_eq!(secret_a, secret_b);
 }
+
+#[test]
+
+fn test_mod_power() {
+    assert_eq!(0, modular_pow(4, 13, 1));
+    assert_eq!(445, modular_pow(4, 13, 497));
+}
