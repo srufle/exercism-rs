@@ -1,3 +1,15 @@
+// Insired by
+// https://exercism.org/tracks/rust/exercises/collatz-conjecture/solutions/damaxi
+
+// Use of recursion, but fails for overflow tests
+pub fn collatz_overflows(n: u64) -> Option<u64> {
+    match n {
+        0 => None,
+        1 => Some(0),
+        n if n % 2 == 0 => collatz(n / 2).map(|x| x + 1),
+        n => collatz(3 * n + 1).map(|x| x + 1),
+    }
+}
 pub fn collatz(n: u64) -> Option<u64> {
     let mut work: Option<u64> = Some(n);
     let mut steps: Option<u64> = Some(0);
