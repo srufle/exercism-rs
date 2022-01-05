@@ -4,9 +4,12 @@
 
 How to run all tests and feature variants
 
+<https://stackoverflow.com/questions/25106554/why-doesnt-println-work-in-rust-unit-tests>
 ``` bash
 cargo test --features add-a-variant -- --include-ignored 
-cargo test -- --include-ignored 
+cargo test -- --include-ignored
+# For troubleshooting
+cargo test -- --include-ignored --nocapture --test-threads=1
 cargo test --features grapheme -- --include-ignored 
 
 ```
