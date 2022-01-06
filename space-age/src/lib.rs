@@ -2,37 +2,50 @@
 // In order to pass the tests you can add-to or change any of this code.
 
 #[derive(Debug)]
-pub struct Duration;
+pub struct Duration {
+    seconds: f64,
+}
 
 impl From<u64> for Duration {
-    fn from(s: u64) -> Self {
-        unimplemented!("s, measured in seconds: {}", s)
+    fn from(seconds: u64) -> Self {
+        let seconds = seconds as f64;
+        Duration { seconds }
     }
 }
 
 pub trait Planet {
-    fn years_during(d: &Duration) -> f64 {
-        unimplemented!(
-            "convert a duration ({:?}) to the number of years on this planet for that duration",
-            d,
-        );
-    }
+    // Learned a trait can force the implementer
+    // to define the specific value
+    const CONVERSION_FACTOR: f64;
+    fn years_during(d: &Duration) -> f64;
 }
 
-pub struct Mercury;
-pub struct Venus;
-pub struct Earth;
-pub struct Mars;
-pub struct Jupiter;
-pub struct Saturn;
-pub struct Uranus;
-pub struct Neptune;
+// The Little Book of Rust Macros
+// https://veykril.github.io/tlborm/
 
-impl Planet for Mercury {}
-impl Planet for Venus {}
-impl Planet for Earth {}
-impl Planet for Mars {}
-impl Planet for Jupiter {}
-impl Planet for Saturn {}
-impl Planet for Uranus {}
-impl Planet for Neptune {}
+#[macro_export]
+macro_rules! planet {
+    // Learned  ident is preferred to ty (type) because
+    // it can be used as the name of the struct
+    ($name:ident, $factor:expr) => {
+        pub struct $name;
+        impl Planet for $name {
+            const CONVERSION_FACTOR: f64 = $factor;
+            fn years_during(d: &Duration) -> f64 {
+                d.seconds / (EARTH_YEAR * Self::CONVERSION_FACTOR)
+            }
+        }
+    };
+}
+
+// As seconds
+const EARTH_YEAR: f64 = 31557600.0;
+
+planet!(Mercury, 0.2408467);
+planet!(Venus, 0.61519726);
+planet!(Earth, 1.0);
+planet!(Mars, 1.8808158);
+planet!(Jupiter, 11.862615);
+planet!(Saturn, 29.447498);
+planet!(Uranus, 84.016846);
+planet!(Neptune, 164.79132);
