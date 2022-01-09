@@ -119,3 +119,48 @@ fn recurring_values_unequal() {
         sublist(&[1, 2, 1, 2, 3], &[1, 2, 3, 1, 2, 3, 2, 3, 2, 1])
     );
 }
+
+#[test]
+#[ignore]
+fn example_1_Sublist() {
+    assert_eq!(Comparison::Sublist, sublist(&[1, 2, 3], &[1, 2, 3, 4, 5]));
+}
+
+#[test]
+#[ignore]
+fn example_2_Sublist() {
+    assert_eq!(Comparison::Sublist, sublist(&[3, 4, 5], &[1, 2, 3, 4, 5]));
+}
+
+#[test]
+#[ignore]
+fn example_3_Sublist() {
+    assert_eq!(Comparison::Sublist, sublist(&[3, 4], &[1, 2, 3, 4, 5]));
+}
+
+#[test]
+#[ignore]
+fn example_4_Equal() {
+    assert_eq!(Comparison::Equal, sublist(&[1, 2, 3], &[1, 2, 3]));
+}
+
+#[test]
+#[ignore]
+fn example_5_Superlist() {
+    assert_eq!(Comparison::Superlist, sublist(&[1, 2, 3, 4, 5], &[2, 3, 4]));
+}
+
+#[test]
+#[ignore]
+fn example_6_Unequal() {
+    assert_eq!(Comparison::Unequal, sublist(&[1, 2, 4], &[1, 2, 3, 4, 5]));
+}
+
+// Examples:
+
+// A = [1, 2, 3], B = [1, 2, 3, 4, 5], A is a sublist of B
+// A = [3, 4, 5], B = [1, 2, 3, 4, 5], A is a sublist of B
+// A = [3, 4], B = [1, 2, 3, 4, 5], A is a sublist of B
+// A = [1, 2, 3], B = [1, 2, 3], A is equal to B
+// A = [1, 2, 3, 4, 5], B = [2, 3, 4], A is a superlist of B
+// A = [1, 2, 4], B = [1, 2, 3, 4, 5], A is not a superlist of, sublist of or equal to B
