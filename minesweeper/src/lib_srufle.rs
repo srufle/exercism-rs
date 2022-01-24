@@ -1,14 +1,3 @@
-#[derive(Debug)]
-enum Direction {
-    North,
-    South,
-    East,
-    West,
-    NorthEast,
-    SouthEast,
-    NorthWest,
-    SouthWest,
-}
 pub fn annotate(minefield: &[&str]) -> Vec<String> {
     let height = minefield.len();
     let width = if height > 0 { minefield[0].len() } else { 0 };
@@ -68,6 +57,17 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
     final_ans
 }
 
+#[derive(Debug)]
+enum Direction {
+    North,
+    South,
+    East,
+    West,
+    NorthEast,
+    SouthEast,
+    NorthWest,
+    SouthWest,
+}
 fn get_cell(
     direction: Direction,
     list: &Vec<Vec<char>>,
@@ -83,6 +83,7 @@ fn get_cell(
     let (row, col) = match direction {
         Direction::North => {
             let row = row - 1;
+
             (row, col)
         }
         Direction::NorthEast => {

@@ -1,27 +1,26 @@
-#[derive(Debug)]
-enum Direction {
-    North,
-    South,
-    East,
-    West,
-    NorthEast,
-    SouthEast,
-    NorthWest,
-    SouthWest,
-}
+use core::str::Chars;
+use std::cmp;
 pub fn annotate(minefield: &[&str]) -> Vec<String> {
+    // let mut ans: Vec<String> = vec![];
+
+    // println!("minefield {:?}", &minefield);
     let height = minefield.len();
     let width = if height > 0 { minefield[0].len() } else { 0 };
     if height == 0 {
         return vec![];
     } else if width == 0 {
-        return vec![String::new()];
+        return vec!["".to_string()];
     }
 
+    // println!("minefield height {:?}", height);
+    // println!("minefield width {:?}", width);
     let mut ans = minefield
         .iter()
         .map(|row| row.chars().collect())
         .collect::<Vec<Vec<char>>>();
+
+    // println!("ans height {:?}", ans.len());
+    // println!("ans width {:?}", ans[0].len());
 
     let mut row = 0;
     let mut col = 0;
@@ -44,6 +43,7 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
                 Direction::NorthWest,
             ];
             for direction in directions {
+                // dbg!(&direction, row, col, &ans);
                 if let Some(c) = get_cell(direction, &ans, row, col, width, height) {
                     if c == '*' {
                         score += 1;
@@ -61,6 +61,7 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
         col = 0;
     }
 
+    // println!("final ans {:?}", &ans);
     let final_ans = ans
         .iter()
         .map(|row| row.iter().collect())
@@ -68,6 +69,17 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
     final_ans
 }
 
+#[derive(Debug)]
+enum Direction {
+    North,
+    South,
+    East,
+    West,
+    NorthEast,
+    SouthEast,
+    NorthWest,
+    SouthWest,
+}
 fn get_cell(
     direction: Direction,
     list: &Vec<Vec<char>>,
@@ -81,8 +93,18 @@ fn get_cell(
     let width = width as isize;
     let height = height as isize;
     let (row, col) = match direction {
+        // row 0
+        // col 0
+        // N   = row - 1
+        // NE  = row - 1 && col +1
+        // E   = col + 1 < (width -1)
+        // SE  = row + 1 && col +1
+        // S   = col + 1
+        // SW  = row + 1 && col -1
+        // W   = col - 1
         Direction::North => {
             let row = row - 1;
+
             (row, col)
         }
         Direction::NorthEast => {

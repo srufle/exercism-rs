@@ -150,3 +150,15 @@ fn large_board() {
         "111111",
     ]);
 }
+
+#[test]
+#[ignore]
+fn from_site_board() {
+    #[rustfmt::skip]
+    run_test(&[
+        "1*3*1",
+        "13*31",
+        " 2*2 ",
+        " 111 ",
+    ]);
+}
