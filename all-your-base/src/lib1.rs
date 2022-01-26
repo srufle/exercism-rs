@@ -36,9 +36,6 @@ pub enum Error {
 ///  * Never output leading 0 digits, unless the input number is 0, in which the output must be `[0]`.
 ///    However, your function must be able to process input with leading 0 digits.
 ///
-///
-/// Inspired by
-/// https://exercism.org/tracks/rust/exercises/all-your-base/solutions/ExercismGhost
 pub fn convert(number: &[u32], from_base: u32, to_base: u32) -> Result<Vec<u32>, Error> {
     if from_base < 2 {
         return Err(Error::InvalidInputBase);
@@ -49,13 +46,23 @@ pub fn convert(number: &[u32], from_base: u32, to_base: u32) -> Result<Vec<u32>,
     if number.len() == 0 {
         return Ok(vec![0]);
     }
+    let most_sig_dig = number[0];
+    let mut acc = if number.len() > 1 {
+        most_sig_dig * from_base
+    } else {
+        most_sig_dig
+    };
 
-    let mut acc = 0;
-    for &n in number.iter() {
+    for index in 1..number.len() {
+        let n = number[index];
         if n >= from_base {
             return Err(Error::InvalidDigit(n));
         }
-        acc = acc * from_base + n;
+        acc = acc + number[index];
+
+        if index < number.len() - 1 {
+            acc = acc * from_base;
+        }
     }
 
     let ans = number_to_digits(acc, to_base);

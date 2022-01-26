@@ -79,6 +79,19 @@ fn trinary_to_hexadecimal() {
 
 #[test]
 #[ignore]
+fn wiki_hex_to_decimal() {
+    let input_base = 16;
+    let input_digits = &[10, 1, 0, 11];
+    let output_base = 10;
+    let output_digits = vec![4, 1, 2, 2, 7];
+    assert_eq!(
+        ayb::convert(input_digits, input_base, output_base),
+        Ok(output_digits)
+    );
+}
+
+#[test]
+#[ignore]
 fn hexadecimal_to_trinary() {
     let input_base = 16;
     let input_digits = &[2, 10];
