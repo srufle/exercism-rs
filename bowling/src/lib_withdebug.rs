@@ -41,26 +41,31 @@ impl BowlingGame {
         let mut total = 0;
         let mut frame = 0;
         let throws = &self.throws;
+        dbg!(throws);
         for _ in 0..10 {
             // for each throw
             // get the first and second value
             if let (Some(&first), Some(&second)) = (throws.get(frame), throws.get(frame + 1)) {
                 // Keep running total
-                total += first + second;
+                total += dbg!(first + second);
                 if first == 10 || first + second == 10 {
                     // strike or spare, add the third throw
                     if let Some(&third) = throws.get(frame + 2) {
                         total += third;
                     } else {
+                        dbg!("1: else strike or spare None");
                         return None;
                     }
                 }
                 // if strike move 1 frame, else move 2
                 frame += if first == 10 { 1 } else { 2 };
+                dbg!(frame, total);
             } else {
+                dbg!("2: else first and second throws None");
                 return None;
             }
         }
+        dbg!(total);
         Some(total)
     }
 }

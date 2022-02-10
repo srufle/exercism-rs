@@ -7,8 +7,8 @@ pub enum Error {
 }
 #[derive(Debug, Default)]
 pub struct BowlingGame {
-    throws: Vec<u16>,
-    second_throw: bool,
+    frames: Vec<u16>,
+    second: bool,
 }
 
 impl BowlingGame {
@@ -17,7 +17,7 @@ impl BowlingGame {
     }
 
     pub fn roll(&mut self, pins: u16) -> Result<(), Error> {
-        if pins > 10 || (self.second_throw && pins + self.throws.last().unwrap() > 10) {
+        if pins > 10 || (self.second && pins + self.frames.last().unwrap() > 10) {
             // if pins > strike  || combined first and second frame > spare
             Err(Error::NotEnoughPinsLeft)
         } else if self.score().is_some() {
@@ -25,14 +25,8 @@ impl BowlingGame {
             Err(Error::GameComplete)
         } else {
             // push pins on vec, and set frame flag
-            self.throws.push(pins);
-            self.second_throw = if pins != 10 {
-                // toggle bool
-                !self.second_throw
-            } else {
-                // strike, so you are not on a second frame
-                false
-            };
+            self.frames.push(pins);
+            self.second = if pins != 10 { !self.second } else { false };
             Ok(())
         }
     }
@@ -40,22 +34,17 @@ impl BowlingGame {
     pub fn score(&self) -> Option<u16> {
         let mut total = 0;
         let mut frame = 0;
-        let throws = &self.throws;
+        let throws = &self.frames;
         for _ in 0..10 {
-            // for each throw
-            // get the first and second value
             if let (Some(&first), Some(&second)) = (throws.get(frame), throws.get(frame + 1)) {
-                // Keep running total
                 total += first + second;
                 if first == 10 || first + second == 10 {
-                    // strike or spare, add the third throw
                     if let Some(&third) = throws.get(frame + 2) {
                         total += third;
                     } else {
                         return None;
                     }
                 }
-                // if strike move 1 frame, else move 2
                 frame += if first == 10 { 1 } else { 2 };
             } else {
                 return None;
